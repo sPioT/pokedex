@@ -2,17 +2,16 @@ import PokemonList from "../../components/pokemonList";
 import PokemonSearch from "../../components/pokemonSearch";
 import { useEffect, useState } from "react";
 import Pokemon from "../../models/pokemon";
-import { mockDataPokemons } from "../../data/mockData";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import PokemonService from "../../services/PokemonService";
 
 const Pokedex = () => {
   const { t } = useTranslation();
 
   const params = useParams();
 
-  const [pokemonOrigin, setPokemonOrigin] =
-    useState<Pokemon[]>(mockDataPokemons);
+  const [pokemonOrigin, setPokemonOrigin] = useState<Pokemon[]>([]);
   const [pokemonL, setPokemonL] = useState<Pokemon[]>([]);
 
   const [searchText, setSearchText] = useState<string | undefined>(
@@ -47,26 +46,25 @@ const Pokedex = () => {
   // effet qui se déclenche si un des élément parmis [sortBy, searchText, sortDirection, t] est modifié
   useEffect(() => {
     // on repart de la liste complète des pokémons et on la fitre en fonction de searchText
-    let tempFiltered: Pokemon[];
 
-    if (searchText !== undefined) {
-      tempFiltered = pokemonOrigin.filter((pokemon: Pokemon) =>
-        t("pokemon." + pokemon.id)
-          .toLowerCase()
-          .startsWith(searchText.toLowerCase())
+    if (searchText !== undefined && searchText !== "") {
+      PokemonService.getStartWith(searchText.toLowerCase()).then((value) =>
+        setPokemonOrigin(value)
       );
     } else {
-      tempFiltered = pokemonOrigin;
+      PokemonService.getAll().then((value) => setPokemonOrigin(value));
     }
+  }, [searchText]);
 
+  useEffect(() => {
     // la liste filtrée est ensuite triée
-    let tempSorted: Pokemon[] = tempFiltered.sort((a: Pokemon, b: Pokemon) => {
+    let tempSorted: Pokemon[] = pokemonOrigin.sort((a: Pokemon, b: Pokemon) => {
       let valA: number | string = a.id;
       let valB: number | string = b.id;
 
       if (sortBy === "name") {
-        valA = a.name;
-        valB = b.name;
+        valA = t("pokemon." + a.id);
+        valB = t("pokemon." + b.id);
       } else if (sortBy === "CP") {
         valA = a.cp;
         valB = b.cp;
@@ -77,7 +75,7 @@ const Pokedex = () => {
 
     // le résultat obtenu est mis dans pokemonL qui est la liste des pokémons affichés
     setPokemonL(tempSorted);
-  }, [sortBy, searchText, sortDirection, pokemonOrigin, t]);
+  }, [sortBy, sortDirection, pokemonOrigin, t]);
 
   return (
     <>

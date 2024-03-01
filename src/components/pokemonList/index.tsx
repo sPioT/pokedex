@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Slide, Typography } from "@mui/material";
 import Pokemon from "../../models/pokemon";
 import PokemonCard from "../pokemonCard";
 import { useTranslation } from "react-i18next";
@@ -26,13 +26,20 @@ const PokemonList = ({ pokemons, handlePokemonChange }: Props) => {
         justifyContent="space-around"
         id="list"
       >
-        {pokemons?.map((pokemon: Pokemon) => (
-          <article>
-            <PokemonCard
-              pokemon={pokemon}
-              handlePokemonChange={handlePokemonChange}
-            />
-          </article>
+        {pokemons?.slice(0, 50).map((pokemon: Pokemon, index: number) => (
+          <Slide
+            in={true}
+            timeout={(index + 1) * 20}
+            style={{ transformOrigin: "0 0 0" }}
+            key={"zoom" + pokemon.id}
+          >
+            <article>
+              <PokemonCard
+                pokemon={pokemon}
+                handlePokemonChange={handlePokemonChange}
+              />
+            </article>
+          </Slide>
         ))}
       </Box>
     </Box>
