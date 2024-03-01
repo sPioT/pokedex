@@ -15,11 +15,13 @@ import { useTranslation } from "react-i18next";
 
 import "./style.css";
 import TypeChip from "../typeChip";
-import { mockDataTypes } from "../../data/mockData";
 import PokemonType from "../../models/pokemonType";
 import { useFormik } from "formik";
 
 import * as yup from "yup";
+import { useEffect, useState } from "react";
+import TypeService from "../../services/TypeService";
+import PokemonService from "../../services/PokemonService";
 
 interface Props {
   pokemon: Pokemon;
@@ -33,6 +35,12 @@ const PokemonEdit = ({
   handlePokemonChange,
 }: Props) => {
   const { t } = useTranslation();
+
+  const [types, setTypes] = useState<PokemonType[]>([]);
+
+  useEffect(() => {
+    TypeService.getTypes().then((value) => setTypes(value));
+  }, []);
 
   const schema = yup.object().shape({
     hp: yup
@@ -70,8 +78,11 @@ const PokemonEdit = ({
         cp: values.cp,
         types: values.types.map((id: string) => +id),
       };
-      handlePokemonChange(pok);
-      handleCloseEdit();
+
+      PokemonService.save(pok).then((pokemon) => {
+        handlePokemonChange(pokemon);
+        handleCloseEdit();
+      });
     },
   });
 
@@ -137,7 +148,7 @@ const PokemonEdit = ({
                 {formik.touched.types && formik.errors.types}
               </Typography>
               <Box display="flex" gap="10px" width="26em" flexWrap="wrap">
-                {mockDataTypes.map((type: PokemonType) => (
+                {types.map((type: PokemonType) => (
                   <Box width="8em">
                     <FormControlLabel
                       control={

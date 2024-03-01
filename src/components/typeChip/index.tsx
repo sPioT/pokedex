@@ -1,10 +1,11 @@
 import { Box, Chip, Typography } from "@mui/material";
 import PokemonType from "../../models/pokemonType";
-import { mockDataTypes } from "../../data/mockData";
 import { useTranslation } from "react-i18next";
 import { Circle } from "@mui/icons-material";
 
 import "./style.css";
+import { useEffect, useState } from "react";
+import TypeService from "../../services/TypeService";
 
 interface props {
   typeId: number;
@@ -13,7 +14,11 @@ interface props {
 const TypeChip = ({ typeId }: props) => {
   const { t } = useTranslation();
 
-  const types: PokemonType[] = mockDataTypes;
+  const [types, setTypes] = useState<PokemonType[]>([]);
+
+  useEffect(() => {
+    TypeService.getTypes().then((value) => setTypes(value));
+  }, []);
 
   const currentType: PokemonType | undefined = types.find(
     (type: PokemonType) => type.id === typeId
