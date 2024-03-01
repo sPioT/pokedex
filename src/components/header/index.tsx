@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import "./style.css";
 import { Logout } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
+import AuthenticationService from "../../services/AuthenticationService";
 
 interface Props {
   isAuthenticated: boolean;
@@ -78,7 +79,7 @@ const Header = ({ isAuthenticated, setIsAuthenticated }: Props) => {
                 <IconButton
                   color="inherit"
                   onClick={() => {
-                    setIsAuthenticated(false);
+                    AuthenticationService.logout();
                   }}
                   title="logout"
                 >

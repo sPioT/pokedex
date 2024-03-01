@@ -6,10 +6,13 @@ import Login from "./pages/login";
 import Pokedex from "./pages/pokedex";
 import { Route, Routes } from "react-router-dom";
 import Welcome from "./pages/welcome";
+import AuthenticationService from "./services/AuthenticationService";
 
 const App = () => {
   // Zone pour faire plein de trucs
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    AuthenticationService.isAuthenticated()
+  );
 
   // Ici on construit l'interface
   return (

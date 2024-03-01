@@ -12,6 +12,7 @@ import { KeyOutlined, LoginOutlined } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import * as yup from "yup";
+import AuthenticationService from "../../services/AuthenticationService";
 
 interface Props {
   setIsAuthenticated: Function;
@@ -52,13 +53,12 @@ const Login = ({ setIsAuthenticated }: Props) => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      if (values.login === "toto" && values.password === "titi") {
-        // dire à l'application qu'on est connecté
-        setIsAuthenticated(true);
-      } else {
-        // afficher un message d'erreur
-        setError(true);
-      }
+      AuthenticationService.login(values.login, values.password).then(
+        (response) => {
+          setIsAuthenticated(response);
+          setError(!response);
+        }
+      );
     },
   });
 
