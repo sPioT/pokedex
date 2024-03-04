@@ -21,7 +21,8 @@
     "pokemonStartWith": "Pokemons starting with {{c}}",
     "pokedexDescription": "The Pokedex is an essential electronic device in the Pokemon universe. \nIt serves as a comprehensive database, listing detailed information on every Pokemon discovered. \nFeaturing a user-friendly interface, the Pokedex provides data such as the type, characteristics, evolutions and sound imprints of each creature. \nIt accompanies Pokemon Trainers in their quest, automatically recording the data of the Pokemon encountered, thus helping to enrich knowledge of the Pokemon world.",
     "logout": "Sign out",
-    "changeSortOrder": "Change sort order"
+    "changeSortOrder": "Change sort order",
+    "addPokemon": "Create a pokemon"
   },
   "type": {
     "1": "Water",

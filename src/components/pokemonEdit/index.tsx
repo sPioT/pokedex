@@ -24,7 +24,7 @@ import TypeService from "../../services/TypeService";
 import PokemonService from "../../services/PokemonService";
 
 interface Props {
-  pokemon: Pokemon;
+  pokemon?: Pokemon;
   handleCloseEdit: Function;
   handlePokemonChange: Function;
 }
@@ -43,6 +43,14 @@ const PokemonEdit = ({
   }, []);
 
   const schema = yup.object().shape({
+    id: yup
+      .number()
+      .required(t("error.required", { field: t("common.pokemonId") }))
+      .min(1, t("error.minValue", { value: 1 }))
+      .max(1000, t("error.maxValue", { value: 1000 })),
+    name: yup
+      .string()
+      .required(t("error.required", { field: t("common.pokemonName") })),
     hp: yup
       .number()
       .required(t("error.required", { field: t("common.pokemonHp") }))
@@ -61,19 +69,21 @@ const PokemonEdit = ({
 
   const formik = useFormik({
     initialValues: {
-      id: pokemon.id,
-      name: pokemon.name,
-      picture: pokemon.picture,
-      hp: pokemon.hp,
-      cp: pokemon.cp,
-      types: pokemon.types.map((id: number) => id.toString()),
+      id: pokemon ? pokemon.id : 0,
+      name: pokemon ? pokemon.name : "",
+      picture: pokemon ? pokemon.picture : "",
+      hp: pokemon ? pokemon.hp : 0,
+      cp: pokemon ? pokemon.cp : 0,
+      types: pokemon ? pokemon.types.map((id: number) => id.toString()) : [],
     },
     validationSchema: schema,
     onSubmit: (values) => {
       let pok: Pokemon = {
         id: values.id,
         name: values.name,
-        picture: values.picture,
+        picture: `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${(
+          "" + values.id
+        ).padStart(3, "0")}.png`,
         hp: values.hp,
         cp: values.cp,
         types: values.types.map((id: string) => +id),
@@ -91,25 +101,55 @@ const PokemonEdit = ({
       className="pokemonDetail"
       sx={{ display: "flex", alignItems: "center", gap: "20" }}
     >
-      <CardMedia
-        component="img"
-        image={pokemon.picture}
-        alt={t("pokemon." + pokemon.id)}
-        sx={{ width: 200 }}
-      />
+      {pokemon && (
+        <CardMedia
+          component="img"
+          image={pokemon?.picture}
+          alt={t("pokemon." + pokemon?.id)}
+          sx={{ width: 200 }}
+        />
+      )}
       <CardContent sx={{ width: 500 }}>
         <form onSubmit={formik.handleSubmit}>
           <Box display={"flex"} className="edit">
             <InputLabel className="label">{t("common.pokemonId")}</InputLabel>
-            <Typography variant="body1">
-              {"#" + pokemon.id.toString().padStart(4, "0")}
-            </Typography>
+            {pokemon ? (
+              <Typography variant="body1">
+                {"#" + pokemon?.id.toString().padStart(4, "0")}
+              </Typography>
+            ) : (
+              <TextField
+                placeholder={t("common.pokemonId")}
+                type="number"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                name="id"
+                value={formik.values.id}
+                error={formik.touched.id && Boolean(formik.errors.id)}
+                helperText={formik.touched.id && formik.errors.id}
+                sx={{ height: 1.1 }}
+              />
+            )}
           </Box>
           <Box display={"flex"} className="edit">
             <InputLabel className="label">{t("common.pokemonName")}</InputLabel>
-            <Typography variant="body1">
-              {t("pokemon." + pokemon.id)}
-            </Typography>
+            {pokemon ? (
+              <Typography variant="body1">
+                {t("pokemon." + pokemon?.id)}
+              </Typography>
+            ) : (
+              <TextField
+                placeholder={t("common.pokemonName")}
+                type="text"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                name="name"
+                value={formik.values.name}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+                sx={{ height: 1.1 }}
+              />
+            )}
           </Box>
           <Box display={"flex"} className="edit">
             <InputLabel className="label">{t("common.pokemonCp")}</InputLabel>
