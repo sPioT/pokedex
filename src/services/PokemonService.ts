@@ -2,7 +2,7 @@ import Pokemon from "../models/pokemon";
 import AuthenticationService from "./AuthenticationService";
 
 class PokemonService {
-  static async delete(id: string | undefined): Promise<boolean> {
+  static async delete(id: number): Promise<boolean> {
     return fetch(`http://localhost:8080/pokemon/${id}`, {
       method: "DELETE",
       headers: {
@@ -42,7 +42,7 @@ class PokemonService {
       });
   }
 
-  static async getOne(id: string | undefined): Promise<Pokemon> {
+  static async getOne(id: number): Promise<Pokemon> {
     return fetch(`http://localhost:8080/pokemon/${id}`, {
       headers: {
         authorization: AuthenticationService.getJwt(),
