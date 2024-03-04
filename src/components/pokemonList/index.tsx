@@ -7,9 +7,14 @@ import "./style.css";
 interface Props {
   pokemons: Pokemon[] | undefined;
   handlePokemonChange: Function;
+  handlePokemonDelete: Function;
 }
 
-const PokemonList = ({ pokemons, handlePokemonChange }: Props) => {
+const PokemonList = ({
+  pokemons,
+  handlePokemonChange,
+  handlePokemonDelete,
+}: Props) => {
   // zone pour faire des trucs
   const { t } = useTranslation();
 
@@ -37,6 +42,7 @@ const PokemonList = ({ pokemons, handlePokemonChange }: Props) => {
               <PokemonCard
                 pokemon={pokemon}
                 handlePokemonChange={handlePokemonChange}
+                handlePokemonDelete={handlePokemonDelete}
               />
             </article>
           </Slide>

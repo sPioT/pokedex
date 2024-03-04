@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import Pokemon from "../../models/pokemon";
-import { Edit } from "@mui/icons-material";
+import { DeleteForever, Edit } from "@mui/icons-material";
 import TypeChip from "../typeChip";
 
 import "./style.css";
@@ -17,13 +17,19 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import PokemonDetail from "../pokemonDetail";
 import PokemonEdit from "../pokemonEdit";
+import PokemonService from "../../services/PokemonService";
 
 interface Props {
   pokemon: Pokemon;
   handlePokemonChange: Function;
+  handlePokemonDelete: Function;
 }
 
-const PokemonCard = ({ pokemon, handlePokemonChange }: Props) => {
+const PokemonCard = ({
+  pokemon,
+  handlePokemonChange,
+  handlePokemonDelete,
+}: Props) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -39,8 +45,17 @@ const PokemonCard = ({ pokemon, handlePokemonChange }: Props) => {
   const handleOpenEdit = () => {
     setOpenEdit(true);
   };
+
   const handleCloseEdit = () => {
     setOpenEdit(false);
+  };
+
+  const handleDelete = () => {
+    PokemonService.delete(pokemon.id).then((ok) => {
+      if (ok) {
+        handlePokemonDelete(pokemon.id);
+      }
+    });
   };
 
   return (
@@ -49,9 +64,14 @@ const PokemonCard = ({ pokemon, handlePokemonChange }: Props) => {
         <CardHeader
           title={"#" + pokemon.id.toString().padStart(4, "0")}
           action={
-            <IconButton aria-label="edit" onClick={handleOpenEdit}>
-              <Edit />
-            </IconButton>
+            <>
+              <IconButton aria-label="edit" onClick={handleOpenEdit}>
+                <Edit />
+              </IconButton>
+              <IconButton aria-label="delete" onClick={handleDelete}>
+                <DeleteForever />
+              </IconButton>
+            </>
           }
         />
         <CardMedia

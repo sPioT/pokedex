@@ -43,6 +43,10 @@ const Pokedex = () => {
     setPokemonOrigin(result);
   };
 
+  const handlePokemonDelete = (id: number) => {
+    setPokemonOrigin(pokemonOrigin.filter((pokemon) => pokemon.id !== id));
+  };
+
   // effet qui se déclenche si un des élément parmis [sortBy, searchText, sortDirection, t] est modifié
   useEffect(() => {
     // on repart de la liste complète des pokémons et on la fitre en fonction de searchText
@@ -90,6 +94,7 @@ const Pokedex = () => {
       <PokemonList
         pokemons={pokemonL}
         handlePokemonChange={handlePokemonChange}
+        handlePokemonDelete={handlePokemonDelete}
       />
     </>
   );
