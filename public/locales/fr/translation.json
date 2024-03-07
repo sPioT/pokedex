@@ -22,7 +22,8 @@
     "pokedexDescription": "Le Pokédex est un dispositif électronique indispensable dans l'univers Pokémon. Il sert de base de données exhaustive, répertoriant les informations détaillées sur chaque Pokémon découvert. Doté d'une interface conviviale, le Pokédex fournit des données telles que le type, les caractéristiques, les évolutions et les empreintes sonores de chaque créature. Il accompagne les Dresseurs Pokémon dans leur quête enregistrant automatiquement les données des Pokémon rencontrés, contribuant ainsi à enrichir la connaissance du monde Pokémon.",
     "logout": "Se déconnecter",
     "changeSortOrder": "Changer l'ordre du tri",
-    "addPokemon": "Créer un pokémon"
+    "addPokemon": "Créer un pokémon",
+    "technicalError": "erreur technique, veuillez réessayer plus tard."
   },
   "type": {
     "1": "Eau",
