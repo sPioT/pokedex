@@ -21,7 +21,7 @@ interface Props {
 const Login = ({ setIsAuthenticated }: Props) => {
   const { t } = useTranslation();
 
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const schema = yup.object().shape({
     login: yup
@@ -53,18 +53,21 @@ const Login = ({ setIsAuthenticated }: Props) => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      AuthenticationService.login(values.login, values.password).then(
-        (response) => {
+      AuthenticationService.login(values.login, values.password)
+        .then((response) => {
           setIsAuthenticated(response);
-          setError(!response);
-        }
-      );
+          setError(response ? "" : t("common.loginError"));
+        })
+        .catch((reason) => {
+          console.error(reason);
+          setError(t("common.technicalError"));
+        });
     },
   });
 
   return (
     <Card className="login" elevation={10}>
-      {error && <Typography color="red">{t("common.loginError")}</Typography>}
+      <Typography color="red">{error}</Typography>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           placeholder={t("common.loginPlaceholder")}

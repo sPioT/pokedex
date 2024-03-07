@@ -23,7 +23,6 @@ export default class AuthenticationService {
         localStorage.setItem("user", JSON.stringify(response.user));
       }
     });
-
     return new Promise((resolve) => resolve(this.isAuthenticated()));
   }
 
